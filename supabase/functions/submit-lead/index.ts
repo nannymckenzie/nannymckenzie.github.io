@@ -5,6 +5,8 @@
 import { renderAdminEmail, renderAdminEmailText } from './emails.ts'
 
 const ALLOWED_ORIGINS = [
+  'https://mckenzie-conner.github.io',
+  // Old origin kept until the repo transfer completes and Pages moves over.
   'https://antonioochoa2804-bit.github.io',
   'http://localhost:5173',
 ]

@@ -3,7 +3,7 @@
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 
-const LIVE = 'https://antonioochoa2804-bit.github.io/mckenzie-ochoa-conner/?src=e2e-test'
+const LIVE = 'https://mckenzie-conner.github.io/mckenzie-ochoa-conner/?src=e2e-test'
 const out = (p) => fileURLToPath(new URL(`../flyers/out/${p}`, import.meta.url))
 
 const browser = await chromium.launch()
