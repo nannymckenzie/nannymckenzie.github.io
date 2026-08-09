@@ -2,6 +2,7 @@
 // table (service role, RLS has no public policies) and emails the admin.
 // Email failure never blocks the insert; a missing RESEND_API_KEY simply
 // degrades to insert-only with a log line.
+import { SMTPClient } from 'https://deno.land/x/denomailer@1.6.0/mod.ts'
 import {
   leadConfirmationSubject,
   renderAdminEmail,
@@ -19,10 +20,13 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? ''
 const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') ?? 'antonio.ochoa2804@gmail.com'
-// Confirmation email to the lead. Off by default: Resend's free tier has no
-// verified domain, so it can only deliver to the account owner's address.
-// Flip to 'true' once a sending domain (or another provider) exists.
+// Confirmation email to the lead, sent from McKenzie's Gmail over SMTP
+// (Resend can't deliver to arbitrary addresses without a verified domain).
+// Needs LEAD_CONFIRMATION_ENABLED=true plus GMAIL_APP_PASSWORD (a Google app
+// password for GMAIL_USER; requires 2-Step Verification on the account).
 const LEAD_CONFIRMATION_ENABLED = (Deno.env.get('LEAD_CONFIRMATION_ENABLED') ?? '').toLowerCase() === 'true'
+const GMAIL_USER = Deno.env.get('GMAIL_USER') ?? 'mckenzieochoaconner@gmail.com'
+const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD') ?? ''
 
 const TOWNS = [
   'Bellingham', 'Ferndale', 'Lynden', 'Blaine', 'Birch Bay', 'Everson',
@@ -185,29 +189,42 @@ Deno.serve(async (req) => {
     } catch (err) {
       console.error('resend errored', err)
     }
+  }
 
-    // Confirmation to the family: same best-effort rules as the admin email.
-    if (LEAD_CONFIRMATION_ENABLED) {
-      try {
-        const res = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'McKenzie Ochoa Conner <onboarding@resend.dev>',
-            to: [lead.email],
-            reply_to: ADMIN_EMAIL,
+  // Confirmation to the family: best effort, from McKenzie's Gmail over SMTP.
+  // Runs after the response is sent (waitUntil) so the form stays snappy.
+  if (LEAD_CONFIRMATION_ENABLED) {
+    if (!GMAIL_APP_PASSWORD) {
+      console.log('LEAD_CONFIRMATION_ENABLED but GMAIL_APP_PASSWORD not set; skipping confirmation email')
+    } else {
+      const sendConfirmation = (async () => {
+        let client: SMTPClient | null = null
+        try {
+          client = new SMTPClient({
+            connection: {
+              hostname: 'smtp.gmail.com',
+              port: 465,
+              tls: true,
+              auth: { username: GMAIL_USER, password: GMAIL_APP_PASSWORD },
+            },
+          })
+          await client.send({
+            from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
+            to: lead.email,
             subject: leadConfirmationSubject(lead),
+            content: renderLeadConfirmationText(lead),
             html: renderLeadConfirmation(lead),
-            text: renderLeadConfirmationText(lead),
-          }),
-        })
-        if (!res.ok) console.error('lead confirmation failed', res.status, await res.text())
-      } catch (err) {
-        console.error('lead confirmation errored', err)
-      }
+          })
+        } catch (err) {
+          console.error('lead confirmation errored', err)
+        } finally {
+          try { await client?.close() } catch (_) { /* already closed */ }
+        }
+      })()
+      // deno-lint-ignore no-explicit-any
+      const runtime = globalThis as any
+      if (runtime.EdgeRuntime?.waitUntil) runtime.EdgeRuntime.waitUntil(sendConfirmation)
+      else await sendConfirmation
     }
   }
 
