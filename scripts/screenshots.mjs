@@ -18,7 +18,7 @@ const og = await browser.newPage({ viewport: { width: 1200, height: 630 } })
 await og.setContent(`<!doctype html><html><head><style>
   @font-face { font-family: 'Fraunces'; src: url('file://${root('node_modules/@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2')}') format('woff2-variations'); font-weight: 100 900; }
   body { margin:0; width:1200px; height:630px; background:#f4ece4; font-family:'Fraunces',Georgia,serif; color:#3f4437; overflow:hidden; position:relative; }
-  .blob1 { position:absolute; width:700px; height:700px; background:#afccd1; opacity:.45; border-radius:58% 42% 55% 45% / 50% 58% 42% 50%; top:-300px; right:-200px; }
+  .blob1 { position:absolute; width:700px; height:700px; background:#8c8f6b; opacity:.35; border-radius:58% 42% 55% 45% / 50% 58% 42% 50%; top:-300px; right:-200px; }
   .blob2 { position:absolute; width:460px; height:460px; background:#e0c3a4; opacity:.4; border-radius:45% 55% 60% 40% / 55% 45% 55% 45%; bottom:-220px; left:-140px; }
   .wrap { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; padding:0 90px; }
   .eyebrow { font-style:italic; font-size:30px; color:#896447; margin:0 0 18px; }
@@ -27,9 +27,9 @@ await og.setContent(`<!doctype html><html><head><style>
 </style></head><body>
   <div class="blob1"></div><div class="blob2"></div>
   <div class="wrap">
-    <p class="eyebrow">Hi, I'm McKenzie</p>
-    <h1>Full-time nanny care in Bellingham, Washington</h1>
-    <p>Teacher-certified early childhood educator · play-based, relationship-centered</p>
+    <p class="eyebrow">Hello! I'm McKenzie!</p>
+    <h1>Teacher-Certified Early Childhood Educator</h1>
+    <p>Full-time nanny childcare for one wonderful family · Bellingham, WA · Fall 2026</p>
   </div>
 </body></html>`, { waitUntil: 'networkidle' })
 await og.screenshot({ path: root('public/og-image.png') })

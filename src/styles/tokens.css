@@ -1,8 +1,8 @@
-/* Design tokens: palette from McKenzie's swatches, warm coastal + earthy.
-   Tints are the swatch colors mixed toward white; never introduce new hues. */
+/* Design tokens: palette synced to the finalized poster (Figma R2SYtD77KvVrU274Gxht8j,
+   node 147:6): sage, olive, cream, sand, brown. Blue is retired. */
 :root {
   /* Core palette */
-  --c-blue: #afccd1;
+  --c-olive: #8c8f6b;
   --c-sand: #e0c3a4;
   --c-cream: #f4ece4;
   --c-sage: #b6b791;
@@ -15,7 +15,6 @@
   --c-error: #a4553f;
 
   /* Tints (swatch + white) */
-  --c-blue-tint: #e3eef0;
   --c-sand-tint: #f4e7d6;
   --c-green-tint: #eef0e2;
   --c-cream-soft: #faf5ef;

@@ -109,7 +109,7 @@
 .hero-shapes::before {
   width: 36rem;
   height: 36rem;
-  background: var(--c-blue);
+  background: var(--c-sage);
   opacity: 0.38;
   top: -16rem;
   right: -13rem;
@@ -230,6 +230,12 @@
   box-shadow: var(--shadow-lift);
 }
 
+.photo-slot picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .photo-slot img {
   width: 100%;
   height: 100%;
@@ -313,8 +319,13 @@
   color: var(--c-ink);
 }
 
-.badge-icon.tint-blue {
-  background: var(--c-blue);
+.badge-icon.tint-olive {
+  background: var(--c-olive);
+  color: var(--c-white);
+}
+
+.badge-icon.tint-sage {
+  background: var(--c-sage);
 }
 
 .badge-icon.tint-sand {
@@ -364,7 +375,7 @@
 .about-photo .photo-slot {
   aspect-ratio: 4 / 4.6;
   border-radius: 42% 58% 52% 48% / 40% 42% 58% 60%;
-  background: linear-gradient(165deg, var(--c-blue) 0%, #93b6bd 100%);
+  background: linear-gradient(165deg, var(--c-sage) 0%, var(--c-olive) 100%);
 }
 
 .about-photo::before {
@@ -429,9 +440,10 @@
   color: var(--c-ink);
 }
 
-.card-icon.tint-blue {
-  background: var(--c-blue);
+.card-icon.tint-olive {
+  background: var(--c-olive);
   border-radius: var(--radius-blob);
+  color: var(--c-white);
 }
 
 .card-icon.tint-sand {
@@ -577,6 +589,14 @@
 }
 
 /* ===== Fit columns ===== */
+.fit-intro {
+  max-width: 46rem;
+  margin: 0 auto;
+  text-align: center;
+  font-size: var(--size-lede);
+  color: var(--c-ink-soft);
+}
+
 .fit-columns {
   display: grid;
   gap: var(--space-3);
