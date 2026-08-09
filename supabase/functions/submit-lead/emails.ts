@@ -19,6 +19,10 @@ export interface LeadFields {
   source: string
 }
 
+// Family inquiries CRM sheet (owned by antonio.ochoa2804, shared with McKenzie).
+const CRM_SHEET_URL =
+  'https://docs.google.com/spreadsheets/d/1_E9nTL1lZSYuU0eQElIs5mlEcVF9nDnEZ-79B5obveY/edit'
+
 function esc(s: string): string {
   return s
     .replaceAll('&', '&amp;')
@@ -62,6 +66,7 @@ export function renderAdminEmail(lead: LeadFields): string {
         <p style="margin:0;font-size:15px;color:#3f4437;line-height:1.5;white-space:pre-wrap;">${esc(lead.message)}</p>
       </div>` : ''}
       <p style="margin:20px 0 0;font-size:13px;color:#896447;">Reply to this email to respond directly to ${esc(lead.parent_name)}.</p>
+      <p style="margin:8px 0 0;font-size:13px;color:#896447;">This inquiry is also in the <a href="${CRM_SHEET_URL}" style="color:#6f5038;font-weight:bold;">family inquiries sheet</a> as a new row.</p>
     </div>
   </div>
 </body>
@@ -85,6 +90,7 @@ export function renderAdminEmailText(lead: LeadFields): string {
     lead.message && `\nAbout their family:\n${lead.message}`,
     '',
     'Reply to this email to respond directly to the family.',
+    `All inquiries: ${CRM_SHEET_URL}`,
   ]
   return lines.filter(Boolean).join('\n')
 }

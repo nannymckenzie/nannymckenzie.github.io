@@ -38,12 +38,31 @@ a webhook failure never blocks the form or the emails.
   touch existing ones.
 - The filter row lets her sort/filter by status, town, or start date.
 
+## Columns (v2)
+
+Received and the lead fields (Parent … Message, Source) are filled by the
+webhook. The rest are for managing and deciding:
+
+- **Status** — dropdown, whole row stays sage+bold while "New".
+- **Rating** — ★ to ★★★★★ dropdown; 4–5 stars tint green so front-runners pop.
+- **Rate ($/hr)** — the rate discussed or agreed, currency formatted.
+- **Pros / cons** — decision notes per family.
+- **Follow-up notes / Last contact** — running log.
+- **Next action** — a date; tints warm red once it's in the past (unless the
+  status is already Matched / Not a fit / No response).
+
+`doPost` matches columns by header NAME, not position — reordering or adding
+columns in the sheet is safe as long as the header names stay.
+
 ## Changing things later
 
-- Statuses or colors: edit `STATUSES` / `statusColors` in the Apps Script and
-  re-run `setup` (re-running is safe; it reformats, it doesn't delete data).
-- Form fields: if the inquiry form changes, update the `HEADERS` list and the
-  `appendRow` order in the script together with the edge function payload.
+- Statuses, ratings, or colors: edit `STATUSES` / `RATINGS` / `statusColors`
+  in the Apps Script and re-run `setup` (safe: reformats, never deletes rows).
+- Script code changes require a redeploy: paste, save, then Deploy > Manage
+  deployments > edit (pencil) > Version: **New version** > Deploy. The URL
+  stays the same. `setup` can also be triggered remotely by POSTing
+  `{token, action: "setup"}` to the web app.
+- Form fields: if the inquiry form changes, update `FIELD_TO_HEADER` /
+  `HEADERS` in the script together with the edge function payload.
 - Rotating the token: generate a new one, update `TOKEN` in the script AND
-  `supabase secrets set CRM_TOKEN='<new>' ...`, then create a NEW deployment
-  (Deploy > Manage deployments > edit > New version).
+  `supabase secrets set CRM_TOKEN='<new>' ...`, then redeploy a new version.
