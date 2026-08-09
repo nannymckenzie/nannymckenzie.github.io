@@ -2,14 +2,16 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import QRCode from 'qrcode'
 
-const URL = 'https://nannymckenzie.github.io/?src=poster'
+// Uppercase triggers QR alphanumeric mode (fewer modules = simpler code);
+// hosts are case-insensitive and form.ts lowercases the query string.
+const URL = 'HTTPS://NANNYMCKENZIE.GITHUB.IO/?SRC=POSTER'
 const OUT = new globalThis.URL('../flyers/out/', import.meta.url)
 
 await mkdir(OUT, { recursive: true })
 
 const svg = await QRCode.toString(URL, {
   type: 'svg',
-  errorCorrectionLevel: 'H',
+  errorCorrectionLevel: 'M',
   margin: 2,
   color: { dark: '#3f4437', light: '#ffffff' },
 })
@@ -17,7 +19,7 @@ await writeFile(new globalThis.URL('qr.svg', OUT), svg)
 
 const png = await QRCode.toBuffer(URL, {
   type: 'png',
-  errorCorrectionLevel: 'H',
+  errorCorrectionLevel: 'M',
   width: 1200,
   margin: 2,
   color: { dark: '#3f4437', light: '#ffffff' },

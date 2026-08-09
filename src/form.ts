@@ -12,7 +12,8 @@ export function wireLeadForm(): void {
   if (!form || !status || !success || !submitBtn) return
 
   const t0 = Date.now()
-  const source = new URLSearchParams(window.location.search).get('src') || 'website'
+  // Lowercased so the poster QR can use uppercase (QR alphanumeric mode).
+  const source = new URLSearchParams(window.location.search.toLowerCase()).get('src') || 'website'
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
