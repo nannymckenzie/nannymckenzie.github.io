@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/mckenzie-ochoa-conner/',
+  base: '/',
   build: {
     target: 'es2019',
   },

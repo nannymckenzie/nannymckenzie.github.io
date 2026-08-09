@@ -4,7 +4,7 @@ Lead-capture funnel for McKenzie Ochoa Conner's full-time nanny care business in
 Bellingham / Whatcom County, WA. All free tier: Vite static site on GitHub Pages,
 Supabase (Postgres + edge function) backend, Resend email, QR-coded print flyers.
 
-- **Live site**: https://mckenzie-conner.github.io/mckenzie-ochoa-conner/
+- **Live site**: https://nannymckenzie.github.io/
 - **Backend**: Supabase project `mckenzie-ochoa-conner` (ref `oxamipkpkkyhfjrmvbgs`)
 - **Figma**: file `y9TlQQYHCMzbldA5Dy5Qq7` (design system + mobile/desktop frames)
 

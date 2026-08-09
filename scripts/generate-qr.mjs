@@ -2,7 +2,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import QRCode from 'qrcode'
 
-const URL = 'https://mckenzie-conner.github.io/mckenzie-ochoa-conner/?src=poster'
+const URL = 'https://nannymckenzie.github.io/?src=poster'
 const OUT = new globalThis.URL('../flyers/out/', import.meta.url)
 
 await mkdir(OUT, { recursive: true })
