@@ -108,3 +108,12 @@ Source of truth for wording: finalized poster, Figma file `R2SYtD77KvVrU274Gxht8
 | `footer.creds` | WA State Teacher Certified (Elementary Ed, Visual Arts, English Language Learners) · Twelve Years… |
 | `footer.area` | Bellingham, WA (York Neighborhood) · Serving Whatcom County, Washington |
 | `misc.cta-bar` | Say hello to McKenzie |
+
+## Share card (Figma page "Share Card", frame `og-card`, exported to public/og-image.png)
+
+| Anchor | Current text (first line) |
+| --- | --- |
+| `copy/share.script` | Hello! I'm McKenzie! |
+| `copy/share.headline` | Teacher-Certified Early Childhood Educator |
+| `copy/share.sub` | FULL-TIME NANNY CHILDCARE · BELLINGHAM, WA |
+| `copy/share.url` | nannymckenzie.github.io |
