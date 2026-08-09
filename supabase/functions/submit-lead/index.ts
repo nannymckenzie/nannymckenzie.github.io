@@ -34,6 +34,22 @@ const TOWNS = [
 ]
 const CONTACT_METHODS = ['Phone call', 'Email', 'Text message']
 
+// denomailer's quoted-printable encoder is broken (leaves "=" unescaped, and
+// its soft line breaks show up as literal "=20" in Gmail), so confirmation
+// bodies are passed pre-encoded as base64 mimeContent instead. RFC 2045 wants
+// encoded lines at 76 chars; SMTP caps raw lines at 998 either way.
+function base64Mime(s: string): string {
+  const bytes = new TextEncoder().encode(s)
+  let bin = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  }
+  const b64 = btoa(bin)
+  const lines: string[] = []
+  for (let i = 0; i < b64.length; i += 76) lines.push(b64.slice(i, i + 76))
+  return lines.join('\r\n')
+}
+
 const MIN_SUBMIT_MS = 3000
 const RATE_LIMIT_PER_HOUR = 3
 
@@ -212,8 +228,19 @@ Deno.serve(async (req) => {
             from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
             to: lead.email,
             subject: leadConfirmationSubject(lead),
-            content: renderLeadConfirmationText(lead),
-            html: renderLeadConfirmation(lead),
+            // html last: in multipart/alternative the final part wins.
+            mimeContent: [
+              {
+                mimeType: 'text/plain; charset="utf-8"',
+                content: base64Mime(renderLeadConfirmationText(lead)),
+                transferEncoding: 'base64',
+              },
+              {
+                mimeType: 'text/html; charset="utf-8"',
+                content: base64Mime(renderLeadConfirmation(lead)),
+                transferEncoding: 'base64',
+              },
+            ],
           })
         } catch (err) {
           console.error('lead confirmation errored', err)
