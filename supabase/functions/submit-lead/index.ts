@@ -27,6 +27,12 @@ const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') ?? 'antonio.ochoa2804@gmail.com'
 const LEAD_CONFIRMATION_ENABLED = (Deno.env.get('LEAD_CONFIRMATION_ENABLED') ?? '').toLowerCase() === 'true'
 const GMAIL_USER = Deno.env.get('GMAIL_USER') ?? 'mckenzieochoaconner@gmail.com'
 const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD') ?? ''
+// Who gets the new-inquiry heads-up when sending via Gmail (defaults to
+// McKenzie herself, so it lands in her inbox and José's stays clean).
+const NOTIFY_EMAIL = Deno.env.get('NOTIFY_EMAIL') ?? GMAIL_USER
+// Apps Script web-app URL for the Google Sheets CRM + shared token it checks.
+const SHEETS_WEBHOOK_URL = Deno.env.get('SHEETS_WEBHOOK_URL') ?? ''
+const CRM_TOKEN = Deno.env.get('CRM_TOKEN') ?? ''
 
 const TOWNS = [
   'Bellingham', 'Ferndale', 'Lynden', 'Blaine', 'Birch Bay', 'Everson',
@@ -181,54 +187,64 @@ Deno.serve(async (req) => {
     return json({ error: 'Something went wrong saving your message.' }, 500, origin)
   }
 
-  // Email notification: best effort only.
-  if (!RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set; skipping admin email (insert-only mode)')
-  } else {
-    try {
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: 'McKenzie Ochoa Conner Website <onboarding@resend.dev>',
-          to: [ADMIN_EMAIL],
-          reply_to: lead.email,
-          subject: `New family inquiry from ${lead.parent_name}`,
-          html: renderAdminEmail(lead),
-          text: renderAdminEmailText(lead),
-        }),
-      })
-      if (!res.ok) console.error('resend failed', res.status, await res.text())
-    } catch (err) {
-      console.error('resend errored', err)
+  // Notifications: best effort only, never block the insert. Runs after the
+  // response is sent (waitUntil) so the form stays snappy. With a Gmail app
+  // password set, everything sends from McKenzie's Gmail: the new-inquiry
+  // heads-up to her inbox, and the confirmation to the family. Resend is only
+  // a fallback for the heads-up when Gmail isn't configured. A Google Sheets
+  // webhook (Apps Script, see scripts/leads-crm-apps-script.gs) mirrors every
+  // lead into the CRM sheet.
+  const notify = (async () => {
+    if (SHEETS_WEBHOOK_URL) {
+      try {
+        const res = await fetch(SHEETS_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: CRM_TOKEN, lead }),
+        })
+        if (!res.ok) console.error('sheets webhook failed', res.status, await res.text())
+      } catch (err) {
+        console.error('sheets webhook errored', err)
+      }
     }
-  }
 
-  // Confirmation to the family: best effort, from McKenzie's Gmail over SMTP.
-  // Runs after the response is sent (waitUntil) so the form stays snappy.
-  if (LEAD_CONFIRMATION_ENABLED) {
-    if (!GMAIL_APP_PASSWORD) {
-      console.log('LEAD_CONFIRMATION_ENABLED but GMAIL_APP_PASSWORD not set; skipping confirmation email')
-    } else {
-      const sendConfirmation = (async () => {
-        let client: SMTPClient | null = null
-        try {
-          client = new SMTPClient({
-            connection: {
-              hostname: 'smtp.gmail.com',
-              port: 465,
-              tls: true,
-              auth: { username: GMAIL_USER, password: GMAIL_APP_PASSWORD },
+    if (GMAIL_APP_PASSWORD) {
+      let client: SMTPClient | null = null
+      try {
+        client = new SMTPClient({
+          connection: {
+            hostname: 'smtp.gmail.com',
+            port: 465,
+            tls: true,
+            auth: { username: GMAIL_USER, password: GMAIL_APP_PASSWORD },
+          },
+        })
+        // Heads-up to McKenzie. replyTo the family so replying starts the
+        // real conversation. html last: in multipart/alternative the final
+        // part wins.
+        await client.send({
+          from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
+          to: NOTIFY_EMAIL,
+          replyTo: lead.email,
+          subject: `\u{1F33F} New family inquiry: ${lead.parent_name}${lead.town ? ` (${lead.town})` : ''}`,
+          mimeContent: [
+            {
+              mimeType: 'text/plain; charset="utf-8"',
+              content: base64Mime(renderAdminEmailText(lead)),
+              transferEncoding: 'base64',
             },
-          })
+            {
+              mimeType: 'text/html; charset="utf-8"',
+              content: base64Mime(renderAdminEmail(lead)),
+              transferEncoding: 'base64',
+            },
+          ],
+        })
+        if (LEAD_CONFIRMATION_ENABLED) {
           await client.send({
             from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
             to: lead.email,
             subject: leadConfirmationSubject(lead),
-            // html last: in multipart/alternative the final part wins.
             mimeContent: [
               {
                 mimeType: 'text/plain; charset="utf-8"',
@@ -242,18 +258,41 @@ Deno.serve(async (req) => {
               },
             ],
           })
-        } catch (err) {
-          console.error('lead confirmation errored', err)
-        } finally {
-          try { await client?.close() } catch (_) { /* already closed */ }
         }
-      })()
-      // deno-lint-ignore no-explicit-any
-      const runtime = globalThis as any
-      if (runtime.EdgeRuntime?.waitUntil) runtime.EdgeRuntime.waitUntil(sendConfirmation)
-      else await sendConfirmation
+      } catch (err) {
+        console.error('gmail send errored', err)
+      } finally {
+        try { await client?.close() } catch (_) { /* already closed */ }
+      }
+    } else if (RESEND_API_KEY) {
+      try {
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'McKenzie Ochoa Conner Website <onboarding@resend.dev>',
+            to: [ADMIN_EMAIL],
+            reply_to: lead.email,
+            subject: `New family inquiry from ${lead.parent_name}`,
+            html: renderAdminEmail(lead),
+            text: renderAdminEmailText(lead),
+          }),
+        })
+        if (!res.ok) console.error('resend failed', res.status, await res.text())
+      } catch (err) {
+        console.error('resend errored', err)
+      }
+    } else {
+      console.log('no email credentials set; insert-only mode')
     }
-  }
+  })()
+  // deno-lint-ignore no-explicit-any
+  const runtime = globalThis as any
+  if (runtime.EdgeRuntime?.waitUntil) runtime.EdgeRuntime.waitUntil(notify)
+  else await notify
 
   return json({ ok: true }, 200, origin)
 })

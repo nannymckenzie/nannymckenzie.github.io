@@ -40,7 +40,7 @@ export function renderAdminEmail(lead: LeadFields): string {
 <html>
 <body style="margin:0;padding:24px;background:#f4ece4;font-family:Georgia,serif;">
   <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;">
-    <div style="background:#afccd1;padding:20px 28px;">
+    <div style="background:#b6b791;padding:20px 28px;">
       <p style="margin:0;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#3f4437;">McKenzie Ochoa Conner</p>
       <h1 style="margin:6px 0 0;font-size:22px;color:#3f4437;font-weight:600;">New family inquiry</h1>
     </div>
@@ -124,6 +124,7 @@ function summaryPairs(lead: LeadFields): Array<[string, string]> {
     ['Children', lead.children_ages],
     ['Start date', lead.start_date ?? ''],
     ['Schedule', lead.schedule],
+    ['Message', lead.message],
   ]
 }
 
