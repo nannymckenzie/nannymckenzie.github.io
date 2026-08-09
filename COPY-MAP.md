@@ -5,6 +5,8 @@ block carries a `data-copy` anchor. Update this table whenever copy changes.
 
 Source of truth for wording: finalized poster, Figma file `R2SYtD77KvVrU274Gxht8j`, node `147:6`.
 
+A second section below covers the lead confirmation email (`copy/email.*`).
+
 | Anchor | Current text (first line) |
 | --- | --- |
 | `misc.skip-link` | Skip to the inquiry form |
@@ -117,3 +119,60 @@ Source of truth for wording: finalized poster, Figma file `R2SYtD77KvVrU274Gxht8
 | `copy/share.headline` | Teacher-Certified Early Childhood Educator |
 | `copy/share.sub` | FULL-TIME NANNY CHILDCARE · BELLINGHAM, WA |
 | `copy/share.url` | nannymckenzie.github.io |
+
+## Lead confirmation email (Figma page "Email", frame `Email/Lead Confirmation`)
+
+Source of truth for wording: `emails/lead-confirmation.mjml`. The compiled HTML is
+generated, never edited by hand.
+
+Layers named `deco/email.var.<field>` hold sample text for fields interpolated at
+send time (first name, contact method, summary values) — copy sweeps skip them.
+`copy/email.subject` and `copy/email.preheader` live in the side frame
+`Email/Meta`; they are email metadata, not rendered layers.
+
+| Anchor | Current text (first line) |
+| --- | --- |
+| `copy/email.subject` | Thank you for reaching out, {first name}! |
+| `copy/email.preheader` | I read every message personally and will be back in touch within a day or two. |
+| `copy/email.brand` | McKenzie Ochoa Conner |
+| `copy/email.brand-tag` | Nanny care with a teacher's heart |
+| `copy/email.greeting` | Hi {first name}, |
+| `copy/email.thanks` | Thank you so much for reaching out about care for your family. Your note made it to me safely… ("by text" within it is `{{CONTACT_METHOD_PHRASE}}`, dynamic) |
+| `copy/email.next-steps.h` | What happens next |
+| `copy/email.next-steps.1` | I'll reply within a day or two, usually sooner. |
+| `copy/email.next-steps.2` | If it feels like we could be a good match, we'll set up a relaxed introductory call… |
+| `copy/email.next-steps.3` | From there, we can plan a time for your children and me to meet… |
+| `copy/email.summary.h` | What you shared with me |
+| `copy/email.summary.label.name` | Name |
+| `copy/email.summary.label.email` | Email |
+| `copy/email.summary.label.phone` | Phone |
+| `copy/email.summary.label.prefers` | Prefers |
+| `copy/email.summary.label.town` | Town |
+| `copy/email.summary.label.children` | Children |
+| `copy/email.summary.label.start-date` | Start date |
+| `copy/email.summary.label.schedule` | Schedule |
+| `copy/email.cta` | Visit my site |
+| `copy/email.signoff` | Warmly, |
+| `copy/email.signature` | McKenzie Ochoa Conner |
+| `copy/email.credentials` | WA State Teacher Certified · CPR and First Aid Certified |
+| `copy/email.footer.area` | Bellingham, WA (York Neighborhood) |
+| `copy/email.footer.reason` | You're receiving this note because you contacted me through nannymckenzie.github.io. |
+
+Not in Figma: the Neighborhood summary row (labels `Neighborhood`) renders in the
+real email only when the lead filled that field; the Figma frame mirrors the
+default preview, which omits it. Summary labels also live in `summaryPairs()` in
+`supabase/functions/submit-lead/emails.ts` — keep both in sync.
+
+### Email sweep procedure
+
+When email copy changes (in either direction):
+
+1. Edit wording in `emails/lead-confirmation.mjml` (HTML body), and mirror any
+   change to the summary labels, subject, or text version in
+   `supabase/functions/submit-lead/emails.ts` (`summaryPairs`,
+   `leadConfirmationSubject`, `renderLeadConfirmationText`).
+2. Recompile: `npm run email` (regenerates the browser preview and the
+   `lead-confirmation-html.ts` template — never edit those two by hand).
+3. Update the matching `copy/email.*` layer text on the Figma `Email` page, and
+   this table.
+4. Redeploy: `supabase functions deploy submit-lead --project-ref oxamipkpkkyhfjrmvbgs`.

@@ -2,7 +2,13 @@
 // table (service role, RLS has no public policies) and emails the admin.
 // Email failure never blocks the insert; a missing RESEND_API_KEY simply
 // degrades to insert-only with a log line.
-import { renderAdminEmail, renderAdminEmailText } from './emails.ts'
+import {
+  leadConfirmationSubject,
+  renderAdminEmail,
+  renderAdminEmailText,
+  renderLeadConfirmation,
+  renderLeadConfirmationText,
+} from './emails.ts'
 
 const ALLOWED_ORIGINS = [
   'https://nannymckenzie.github.io',
@@ -13,6 +19,10 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') ?? ''
 const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') ?? 'antonio.ochoa2804@gmail.com'
+// Confirmation email to the lead. Off by default: Resend's free tier has no
+// verified domain, so it can only deliver to the account owner's address.
+// Flip to 'true' once a sending domain (or another provider) exists.
+const LEAD_CONFIRMATION_ENABLED = (Deno.env.get('LEAD_CONFIRMATION_ENABLED') ?? '').toLowerCase() === 'true'
 
 const TOWNS = [
   'Bellingham', 'Ferndale', 'Lynden', 'Blaine', 'Birch Bay', 'Everson',
@@ -174,6 +184,30 @@ Deno.serve(async (req) => {
       if (!res.ok) console.error('resend failed', res.status, await res.text())
     } catch (err) {
       console.error('resend errored', err)
+    }
+
+    // Confirmation to the family: same best-effort rules as the admin email.
+    if (LEAD_CONFIRMATION_ENABLED) {
+      try {
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'McKenzie Ochoa Conner <onboarding@resend.dev>',
+            to: [lead.email],
+            reply_to: ADMIN_EMAIL,
+            subject: leadConfirmationSubject(lead),
+            html: renderLeadConfirmation(lead),
+            text: renderLeadConfirmationText(lead),
+          }),
+        })
+        if (!res.ok) console.error('lead confirmation failed', res.status, await res.text())
+      } catch (err) {
+        console.error('lead confirmation errored', err)
+      }
     }
   }
 

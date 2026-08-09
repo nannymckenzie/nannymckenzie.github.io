@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "email": "node scripts/build-email.mjs",
     "qr": "node scripts/generate-qr.mjs",
     "flyers": "node scripts/render-flyers.mjs"
   },
@@ -15,6 +16,7 @@
     "@fontsource-variable/nunito-sans": "^5.2.0"
   },
   "devDependencies": {
+    "mjml": "^5.4.0",
     "playwright": "^1.54.0",
     "qrcode": "^1.5.4",
     "typescript": "^5.6.0",

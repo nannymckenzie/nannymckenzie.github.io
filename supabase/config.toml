@@ -401,3 +401,8 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# submit-lead is called directly from the public site and the keepalive cron;
+# it does its own origin allow-listing, spam checks, and rate limiting.
+[functions.submit-lead]
+verify_jwt = false

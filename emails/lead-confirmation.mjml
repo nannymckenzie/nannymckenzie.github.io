@@ -1,0 +1,145 @@
+<!--
+  Lead confirmation email, sent to a family after they submit the inquiry form.
+  Source of truth for the email copy and layout. Compile with `npm run email`,
+  which regenerates:
+    - emails/lead-confirmation.html            (browser preview, sample data)
+    - supabase/functions/submit-lead/lead-confirmation-html.ts  (generated, do not edit)
+  Tokens filled in at send time by renderLeadConfirmation() in emails.ts:
+    {{PARENT_FIRST_NAME}}    lead's first name, HTML-escaped
+    {{CONTACT_METHOD_PHRASE}} "with a phone call" / "by email" / "by text" / fallback
+    {{SUMMARY_ROWS}}         <tr> rows summarizing the submission, values escaped
+  Figma replica: file R2SYtD77KvVrU274Gxht8j, page Email, frame Email/Lead Confirmation.
+  Layer naming contract lives in COPY-MAP.md (copy/email.* section).
+-->
+<mjml>
+  <mj-head>
+    <mj-title>Thank you for reaching out</mj-title>
+    <!-- copy/email.preheader -->
+    <mj-preview>I read every message personally and will be back in touch within a day or two.</mj-preview>
+    <mj-font name="Fraunces" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" />
+    <mj-font name="Nunito Sans" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="'Nunito Sans', Arial, Helvetica, sans-serif" />
+      <mj-text font-size="15px" line-height="24px" color="#3f4437" padding="0 32px" />
+      <mj-section padding="0" background-color="#fffdf9" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f4ece4" width="600px">
+
+    <!-- Header band -->
+    <mj-section background-color="#b6b791" padding="26px 0 22px" border-radius="14px 14px 0 0">
+      <mj-column>
+        <!-- copy/email.brand -->
+        <mj-text align="center" font-size="12px" letter-spacing="2px" text-transform="uppercase" color="#fffdf9" font-weight="700" padding="0 32px 6px">
+          McKenzie Ochoa Conner
+        </mj-text>
+        <!-- copy/email.brand-tag -->
+        <mj-text align="center" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="20px" line-height="26px" color="#3f4437" padding="0 32px">
+          Nanny care with a teacher's heart
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Photo + greeting -->
+    <mj-section padding="30px 0 0">
+      <mj-column>
+        <mj-image src="https://nannymckenzie.github.io/photos/mckenzie-portrait.jpg" alt="McKenzie smiling on a sofa, reading a picture book, with baby toys close by" width="148px" border-radius="14px" padding="0 32px 22px" />
+        <!-- copy/email.greeting (deco/email.var.first-name) -->
+        <mj-text font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="24px" line-height="32px" color="#6f5038" padding="0 32px 12px">
+          Hi {{PARENT_FIRST_NAME}},
+        </mj-text>
+        <!-- copy/email.thanks (deco/email.var.contact-method) -->
+        <mj-text padding="0 32px 8px">
+          Thank you so much for reaching out about care for your family. Your note made it to me safely, and I'm really glad you did. I read every message personally, and I'll be back in touch {{CONTACT_METHOD_PHRASE}} within a day or two.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- What happens next -->
+    <mj-section padding="18px 0 0">
+      <mj-column>
+        <!-- copy/email.next-steps.h -->
+        <mj-text font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="18px" line-height="24px" color="#3f4437" font-weight="600" padding="0 32px 10px">
+          What happens next
+        </mj-text>
+        <mj-table cellpadding="0" cellspacing="0" width="100%" padding="0 32px 4px">
+          <!-- copy/email.next-steps.1 -->
+          <tr>
+            <td width="28" align="left" valign="top" style="padding:0 0 10px;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#896447;font-weight:700;">1.</td>
+            <td valign="top" style="padding:0 0 10px;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#3f4437;">I'll reply within a day or two, usually sooner.</td>
+          </tr>
+          <!-- copy/email.next-steps.2 -->
+          <tr>
+            <td width="28" align="left" valign="top" style="padding:0 0 10px;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#896447;font-weight:700;">2.</td>
+            <td valign="top" style="padding:0 0 10px;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#3f4437;">If it feels like we could be a good match, we'll set up a relaxed introductory call to get to know each other and talk through your family's days.</td>
+          </tr>
+          <!-- copy/email.next-steps.3 -->
+          <tr>
+            <td width="28" align="left" valign="top" style="padding:0;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#896447;font-weight:700;">3.</td>
+            <td valign="top" style="padding:0;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#3f4437;">From there, we can plan a time for your children and me to meet, so everyone can see how it feels before anything is decided.</td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+    <!-- Submission summary (receipt) -->
+    <mj-section padding="22px 32px 0">
+      <mj-column background-color="#faf5ef" border="1px solid #e0c3a4" border-radius="12px" padding="18px 22px 20px">
+        <!-- copy/email.summary.h -->
+        <mj-text font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="16px" line-height="22px" color="#6f5038" font-weight="600" padding="0 0 2px">
+          What you shared with me
+        </mj-text>
+        <mj-table cellpadding="0" cellspacing="0" width="100%" padding="0">
+          {{SUMMARY_ROWS}}
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+    <!-- Button -->
+    <mj-section padding="26px 0 4px">
+      <mj-column>
+        <!-- copy/email.cta -->
+        <mj-button href="https://nannymckenzie.github.io/" background-color="#896447" color="#fffdf9" font-family="'Nunito Sans', Arial, Helvetica, sans-serif" font-size="15px" font-weight="700" border-radius="999px" inner-padding="13px 30px" padding="0 32px">
+          Visit my site
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Signature -->
+    <mj-section padding="24px 0 30px">
+      <mj-column>
+        <!-- copy/email.signoff -->
+        <mj-text padding="0 32px 2px">
+          Warmly,
+        </mj-text>
+        <!-- copy/email.signature -->
+        <mj-text font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="19px" line-height="26px" color="#6f5038" padding="0 32px 6px">
+          McKenzie Ochoa Conner
+        </mj-text>
+        <!-- copy/email.credentials -->
+        <mj-text font-size="13px" line-height="20px" color="#896447" padding="0 32px">
+          WA State Teacher Certified &middot; CPR and First Aid Certified
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#e0e2cb" padding="20px 0 24px" border-radius="0 0 14px 14px">
+      <mj-column>
+        <!-- copy/email.footer.area -->
+        <mj-text align="center" font-size="13px" line-height="20px" color="#3f4437" padding="0 32px 6px">
+          Bellingham, WA (York Neighborhood)
+        </mj-text>
+        <!-- copy/email.footer.reason -->
+        <mj-text align="center" font-size="12px" line-height="18px" color="#5c6050" padding="0 32px">
+          You're receiving this note because you contacted me through <a href="https://nannymckenzie.github.io/" style="color:#5c6050;">nannymckenzie.github.io</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#f4ece4" padding="0 0 24px">
+      <mj-column><mj-text padding="0" font-size="1px" line-height="1px">&nbsp;</mj-text></mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
