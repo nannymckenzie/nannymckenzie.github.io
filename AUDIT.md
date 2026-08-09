@@ -96,3 +96,32 @@ Solid foundation (palette, tone, structure, a11y basics like skip-link and
 honeypot are already right). What separates it from top-tier is identity,
 art direction, conversion architecture, and micro-craft — all addressed in
 the applied redesign.
+
+---
+
+# Poster Audit — Figma poster variations (2026-07-26)
+
+Reviewed against the redesigned landing page. Verdict: functional but generic —
+they read as "text on a colored rectangle," not as the same brand as the site.
+
+1. **No brand identity.** None of the three carries the monogram + name lockup.
+   Poster A never states her name outside the URL. → Every poster gets the
+   brand lockup and the "McK" portrait blob signature.
+2. **The site's visual language is missing.** No wave dividers, no botanical
+   sprigs, barely any organic shapes — the exact elements that make the site
+   feel crafted. → Bring waves, blobs, and sprigs into every layout.
+3. **QR placeholders look like missing assets.** Solid black squares read as
+   errors. → Styled QR placeholder with finder-pattern corners inside a card
+   with a clear "scan" affordance + a human-typable URL fallback.
+4. **Weak typographic hierarchy.** No overline system, no italic accent in
+   headlines ("teacher's" treatment), flat single-size body runs. → Reuse the
+   site's type system: overline, display with accent, lede, small.
+5. **Dead space with no rhythm.** A has a large empty cream span; B a white
+   void; C floats a quote in green. → Band-based compositions with wave
+   transitions, matching the site's alternating rhythm.
+6. **Credentials inconsistent with site.** Plain checks and meaningless color
+   dots vs. the site's icon badges. → Icon badge treatment on all three.
+7. **Poster-craft basics.** A physical poster needs the who/what/where
+   scannable in 3 seconds and one clear CTA. C buries the name in the cite
+   line. → Name, area, and "full-time, Mon–Fri" always visible; single strong
+   scan CTA per poster.
