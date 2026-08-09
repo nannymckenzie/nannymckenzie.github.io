@@ -924,6 +924,12 @@
   box-shadow: var(--shadow-lift);
 }
 
+.form-success .success-note {
+  margin-top: var(--space-2);
+  font-size: 0.9rem;
+  color: var(--c-ink-soft);
+}
+
 .success-shape {
   width: 4.2rem;
   height: 4.2rem;

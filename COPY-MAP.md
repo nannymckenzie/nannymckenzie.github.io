@@ -104,6 +104,7 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `inquiry.privacy` | Your details go only to McKenzie, never shared or added to any list. |
 | `inquiry.success.h3` | Thank you! Your note is on its way. |
 | `inquiry.success.body` | I'm so glad you reached out. I read every message personally… |
+| `inquiry.success.spam-note` | A confirmation email is on its way to you. If it's not in your inbox in a few minutes… |
 | `footer.name` | McKenzie Ochoa Conner |
 | `footer.tagline` | Full-time nanny care with a teacher's heart |
 | `footer.cta` | Say hello |
