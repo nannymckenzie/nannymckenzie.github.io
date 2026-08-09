@@ -176,3 +176,33 @@ When email copy changes (in either direction):
 3. Update the matching `copy/email.*` layer text on the Figma `Email` page, and
    this table.
 4. Redeploy: `supabase functions deploy submit-lead --project-ref oxamipkpkkyhfjrmvbgs`.
+
+## Copy sweep procedure (Figma → index.html)
+
+The Landing Page in Figma (`R2SYtD77KvVrU274Gxht8j`, page `2:2`) holds two replica frames:
+`Landing/Desktop` (1440) and `Landing/Mobile` (390). Every text layer that maps to site copy
+is named `copy/<anchor>`, matching `data-copy="<anchor>"` in `index.html`. **Desktop is
+canonical** — if desktop and mobile disagree, desktop wins (McKenzie should edit both, but
+the sweep only reads desktop).
+
+How a future session applies McKenzie's Figma text edits back to the site:
+
+1. Read all `copy/*` text layers from `Landing/Desktop` via the Figma MCP
+   (`get_design_context` on the frame, or a `use_figma` script that returns
+   `{name, characters}` for `frame.findAll(n => n.name.startsWith("copy/"))` —
+   include invisible layers: FAQ answers, `inquiry.success.*`, `misc.skip-link`
+   are hidden by design).
+2. For each layer, diff `characters` against the text content of the element with the
+   matching `data-copy` attribute in `index.html`.
+   - Trust badges (`trust.badge1–5`): the Figma layer is two lines — line 1 is the badge
+     title, line 2 maps to the `<small>` child.
+   - Offer bullets (`offer.bullet1–7`): the leading bold range maps to the `<strong>` child.
+   - Labels with a required mark (`inquiry.label.*`, `inquiry.req-note`): the trailing/leading
+     `*` belongs to the `<span class="req">` child, not editable text.
+   - `approach.h2`: the italic brown range maps to the `<em>` element.
+3. Apply **changed strings only** — text edits in place, no structural/HTML edits, no
+   attribute changes, no reordering.
+4. Rebuild (`npm run build`) to confirm nothing breaks.
+5. List every applied change (anchor → old text → new text) in the session report.
+6. Commit and push (deploys via GitHub Pages).
+7. Flag any mobile/desktop mismatches found along the way so the frames can be re-synced.
