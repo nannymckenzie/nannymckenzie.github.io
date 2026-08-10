@@ -12,6 +12,7 @@
     "flyers": "node scripts/render-flyers.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/caveat": "^5.3.0",
     "@fontsource-variable/fraunces": "^5.2.0",
     "@fontsource-variable/nunito-sans": "^5.2.0"
   },

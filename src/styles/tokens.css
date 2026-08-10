@@ -26,12 +26,12 @@
 
   --font-display: 'Fraunces Variable', Georgia, serif;
   --font-body: 'Nunito Sans Variable', 'Segoe UI', sans-serif;
+  --font-script: 'Caveat Variable', 'Comic Sans MS', cursive;
 
   /* Fluid type scale (mobile-first) */
   --size-h1: clamp(2.35rem, 1.35rem + 4.6vw, 3.9rem);
   --size-h2: clamp(1.8rem, 1.3rem + 2.2vw, 2.55rem);
   --size-h3: 1.25rem;
-  --size-quote: clamp(1.45rem, 1.05rem + 2vw, 2.2rem);
   --size-body: 1.0625rem;
   --size-lede: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
   --size-small: 0.875rem;

@@ -1,5 +1,6 @@
 import '@fontsource-variable/fraunces'
 import '@fontsource-variable/nunito-sans'
+import '@fontsource-variable/caveat'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/sections.css'

@@ -1,6 +1,6 @@
-# McKenzie Ochoa Conner — Nanny Landing Page
+# McKenzie Conner — Nanny Landing Page
 
-Lead-capture funnel for McKenzie Ochoa Conner's full-time nanny care business in
+Lead-capture funnel for McKenzie Conner's full-time nanny care business in
 Bellingham / Whatcom County, WA. All free tier: Vite static site on GitHub Pages,
 Supabase (Postgres + edge function) backend, Resend email, QR-coded print flyers.
 

@@ -45,7 +45,7 @@ export function renderAdminEmail(lead: LeadFields): string {
 <body style="margin:0;padding:24px;background:#f4ece4;font-family:Georgia,serif;">
   <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;">
     <div style="background:#b6b791;padding:20px 28px;">
-      <p style="margin:0;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#3f4437;">McKenzie Ochoa Conner</p>
+      <p style="margin:0;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#3f4437;">McKenzie Conner</p>
       <h1 style="margin:6px 0 0;font-size:22px;color:#3f4437;font-weight:600;">New family inquiry</h1>
     </div>
     <div style="padding:24px 28px;">
@@ -101,21 +101,12 @@ function leadFirstName(lead: LeadFields): string {
   return lead.parent_name.trim().split(/\s+/)[0] || 'there'
 }
 
-// contact_method is validated against a whitelist in index.ts before this runs.
-function contactPhrase(method: string): string {
-  switch (method) {
-    case 'Phone call': return 'with a phone call'
-    case 'Email': return 'by email'
-    case 'Text message': return 'by text'
-    default: return 'using the contact details you shared'
-  }
-}
-
+// Every form question renders in the receipt, per José's request; answers the
+// family left blank show an em dash instead of dropping the row.
 function summaryRow(label: string, value: string): string {
-  if (!value) return ''
   return `<tr>
   <td align="left" valign="top" style="padding:8px 14px 0 0;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#896447;white-space:nowrap;">${label}</td>
-  <td align="left" valign="top" style="padding:8px 0 0;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:14px;line-height:21px;color:#3f4437;">${esc(value)}</td>
+  <td align="left" valign="top" style="padding:8px 0 0;font-family:'Nunito Sans',Arial,Helvetica,sans-serif;font-size:14px;line-height:21px;color:#3f4437;">${value ? esc(value) : '&mdash;'}</td>
 </tr>`
 }
 
@@ -141,29 +132,26 @@ export function leadConfirmationSubject(lead: LeadFields): string {
 export function renderLeadConfirmation(lead: LeadFields): string {
   const fills: Record<string, string> = {
     '{{PARENT_FIRST_NAME}}': esc(leadFirstName(lead)),
-    '{{CONTACT_METHOD_PHRASE}}': contactPhrase(lead.contact_method),
     '{{SUMMARY_ROWS}}': summaryPairs(lead).map(([l, v]) => summaryRow(l, v)).join(''),
   }
   // Single-pass replace so escaped user input is never rescanned for tokens.
   return LEAD_CONFIRMATION_HTML.replace(
-    /\{\{(?:PARENT_FIRST_NAME|CONTACT_METHOD_PHRASE|SUMMARY_ROWS)\}\}/g,
+    /\{\{(?:PARENT_FIRST_NAME|SUMMARY_ROWS)\}\}/g,
     (token) => fills[token],
   )
 }
 
 export function renderLeadConfirmationText(lead: LeadFields): string {
-  const summary = summaryPairs(lead)
-    .filter(([, v]) => v)
-    .map(([l, v]) => `${l}: ${v}`)
+  const summary = summaryPairs(lead).map(([l, v]) => `${l}: ${v || '—'}`)
   const lines = [
     `Hi ${leadFirstName(lead)},`,
     '',
-    'Thank you so much for reaching out about care for your family. Your note made it to me safely, and I\'m really glad you did. I read every message personally, and I\'ll be back in touch ' + contactPhrase(lead.contact_method) + ' within a day or two.',
+    'Thank you so much for reaching out about care for your family! I\'m looking forward to reading and responding soon.',
     '',
     'What happens next',
-    '1. I\'ll reply within a day or two, usually sooner.',
-    '2. If it feels like we could be a good match, we\'ll set up a relaxed introductory call to get to know each other and talk through your family\'s days.',
-    '3. From there, we can plan a time for your children and me to meet, so everyone can see how it feels before anything is decided.',
+    '- If it feels like we could be a good match, we\'ll set up a relaxed introductory call to get to know each other and talk through your family\'s needs.',
+    '- From there, we can plan an in-person meeting with your child to see how our fit feels to everyone.',
+    '- Lastly, we can schedule a play-date for your child and my baby.',
     '',
     'What you shared with me',
     ...summary,
@@ -171,8 +159,8 @@ export function renderLeadConfirmationText(lead: LeadFields): string {
     'Visit my site: https://nannymckenzie.github.io/',
     '',
     'Warmly,',
-    'McKenzie Ochoa Conner',
-    'WA State Teacher Certified · CPR and First Aid Certified',
+    'McKenzie',
+    'WA State Teacher Certified · STARS Early Childhood Education Certified · CPR and First Aid Certified',
     '',
     'Bellingham, WA (York Neighborhood)',
     'You\'re receiving this note because you contacted me through nannymckenzie.github.io.',

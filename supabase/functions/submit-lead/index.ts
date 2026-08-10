@@ -147,7 +147,7 @@ Deno.serve(async (req) => {
     town: clip(body.town, 50),
     neighborhood: clip(body.neighborhood, 200),
     children_ages: clip(body.children_ages, 500),
-    start_date: clip(body.start_date, 10) || null,
+    start_date: clip(body.start_date, 200) || null,
     schedule: clip(body.schedule, 500),
     message: clip(body.message, 5000),
     source: clip(body.source, 50) || 'website',
@@ -159,7 +159,6 @@ Deno.serve(async (req) => {
   }
   if (lead.contact_method && !CONTACT_METHODS.includes(lead.contact_method)) lead.contact_method = ''
   if (lead.town && !TOWNS.includes(lead.town)) lead.town = 'Other'
-  if (lead.start_date && !/^\d{4}-\d{2}-\d{2}$/.test(lead.start_date)) lead.start_date = null
 
   const ip = (req.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
   lead.ip_hash = await sha256Hex(ip)
@@ -223,7 +222,7 @@ Deno.serve(async (req) => {
         // real conversation. html last: in multipart/alternative the final
         // part wins.
         await client.send({
-          from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
+          from: `McKenzie Conner <${GMAIL_USER}>`,
           to: NOTIFY_EMAIL,
           replyTo: lead.email,
           subject: `\u{1F33F} New family inquiry: ${lead.parent_name}${lead.town ? ` (${lead.town})` : ''}`,
@@ -242,7 +241,7 @@ Deno.serve(async (req) => {
         })
         if (LEAD_CONFIRMATION_ENABLED) {
           await client.send({
-            from: `McKenzie Ochoa Conner <${GMAIL_USER}>`,
+            from: `McKenzie Conner <${GMAIL_USER}>`,
             to: lead.email,
             subject: leadConfirmationSubject(lead),
             mimeContent: [
@@ -273,7 +272,7 @@ Deno.serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'McKenzie Ochoa Conner Website <onboarding@resend.dev>',
+            from: 'McKenzie Conner Website <onboarding@resend.dev>',
             to: [ADMIN_EMAIL],
             reply_to: lead.email,
             subject: `New family inquiry from ${lead.parent_name}`,
