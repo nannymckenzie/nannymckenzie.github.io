@@ -93,13 +93,13 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `inquiry.success.h3` | Thank you! Your note is on its way. |
 | `inquiry.success.body` | Thank you so much for reaching out about care for your family! I'm looking forward… |
 | `inquiry.success.spam-note` | A confirmation email is on its way to you. If it's not in your inbox in a few minutes… |
-| `misc.cta-bar` | Say hello to McKenzie |
 
 Removed 2026-08-09 (sections dropped in Figma, per José's dev annotations):
 `trust.badge2`, `trust.badge5`, `about.photo-note`, `about.body2`, `about.body3`,
 `quote.*`, `offer.photo-note`, `fit.intro`, `cta.*`, `faq.*`, `inquiry.lede`,
-`footer.*`. The old anchors remain only in the stale `Landing/Mobile` frame
-(see note at the bottom).
+`footer.*`, and `misc.cta-bar` (José dropped the sticky mobile CTA bar —
+the header CTA is enough). The old anchors remain only in the stale
+`Landing/Mobile` frame (see note at the bottom).
 
 ## Share card (Figma page "Share Card", frame `og-card`, exported to public/og-image.png)
 

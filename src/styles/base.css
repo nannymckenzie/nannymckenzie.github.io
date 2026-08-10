@@ -117,8 +117,8 @@ img {
   position: relative;
 }
 
-.section-tint {
-  background: var(--c-green-tint);
+.section-green {
+  background: var(--c-green);
 }
 
 .section-warm {

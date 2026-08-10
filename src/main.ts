@@ -38,22 +38,4 @@ if (header) {
   window.addEventListener('scroll', onScroll, { passive: true })
 }
 
-// Sticky mobile CTA: appears after the hero, hides while the form is on screen
-const ctaBar = document.getElementById('cta-bar')
-const hero = document.querySelector('.hero')
-const inquiry = document.getElementById('inquiry')
-if (ctaBar && hero && inquiry && 'IntersectionObserver' in window) {
-  let pastHero = false
-  let formInView = false
-  const update = () => ctaBar.classList.toggle('is-hidden', !pastHero || formInView)
-  new IntersectionObserver(([entry]) => {
-    pastHero = !entry.isIntersecting
-    update()
-  }).observe(hero)
-  new IntersectionObserver(([entry]) => {
-    formInView = entry.isIntersecting
-    update()
-  }).observe(inquiry)
-}
-
 wireLeadForm()

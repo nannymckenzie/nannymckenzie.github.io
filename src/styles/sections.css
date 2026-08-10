@@ -334,10 +334,6 @@
   color: var(--c-white);
 }
 
-.badge-icon.tint-sage {
-  background: var(--c-sage);
-}
-
 .badge-icon.tint-sand {
   background: var(--c-sand);
 }
@@ -415,8 +411,8 @@
   border-radius: var(--radius-blob-b);
 }
 
-.card-icon.tint-sage {
-  background: var(--c-sage);
+.card-icon.tint-green {
+  background: var(--c-green);
   border-radius: var(--radius-blob-c);
 }
 
@@ -786,37 +782,6 @@
   color: var(--c-ink);
 }
 
-/* ===== Sticky mobile CTA bar ===== */
-.cta-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 90;
-  padding: 0.7rem clamp(1.25rem, 4vw, 2rem)
-    calc(0.7rem + env(safe-area-inset-bottom, 0px));
-  background: rgba(255, 253, 249, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-top: 1px solid var(--c-border-soft);
-  transform: translateY(0);
-  transition: transform 0.3s ease;
-}
-
-.cta-bar .btn {
-  width: 100%;
-}
-
-.cta-bar.is-hidden {
-  transform: translateY(110%);
-}
-
-@media (min-width: 760px) {
-  .cta-bar {
-    display: none;
-  }
-}
-
 /* Botanical sprig accents */
 .sprig {
   color: var(--c-brown);
@@ -832,8 +797,12 @@ figure {
   color: var(--c-cream);
 }
 
-.wave.w-tint {
-  color: var(--c-green-tint);
+.wave.w-white {
+  color: var(--c-white);
+}
+
+.wave.w-green {
+  color: var(--c-green);
 }
 
 .wave.bg-white {
@@ -842,4 +811,8 @@ figure {
 
 .wave.bg-cream {
   background: var(--c-cream);
+}
+
+.wave.bg-green {
+  background: var(--c-green);
 }
