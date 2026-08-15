@@ -311,7 +311,7 @@
 
 .badge {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.85rem;
   background: var(--c-cream-soft);
   border: 1px solid var(--c-border-soft);

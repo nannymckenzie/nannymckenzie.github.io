@@ -29,8 +29,9 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `hero.meta2` | Full-time, Monday to Friday |
 | `hero.meta3` | Starting as early as Fall 2026 |
 | `about.overline` | About |
-| `about.h2` | With a passion for early childhood education |
+| `about.h2` | Passion for early childhood education |
 | `about.body1` | As a former primary school teacher with three years experience as a full-time nanny… |
+| `about.body2` | References available upon request. (reintroduced 2026-08-15 per Figma annotation) |
 | `trust.badge1` | WA State Teacher Certified / Endorsed in Elementary Ed, Visual Arts, English Language Learners |
 | `trust.badge3` | STARS Early Childhood Certified (subtitle dropped 2026-08-15) |
 | `trust.badge4` | CPR and First Aid Certified (subtitle dropped 2026-08-15) |
@@ -77,7 +78,7 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `inquiry.h2` | Let's connect! Tell me about your family |
 | `inquiry.req-note` | * means the field is required. |
 | `inquiry.legend1` | About you |
-| `inquiry.label.parent-name` | Parents' names * |
+| `inquiry.label.parent-name` | Parents’ names * (free-text, may contain multiple names — José's Figma annotation 2026-08-15) |
 | `inquiry.label.email` | Email * |
 | `inquiry.label.phone` | Phone * |
 | `inquiry.label.contact-method` | Preferred contact method |
