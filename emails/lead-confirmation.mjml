@@ -36,10 +36,9 @@
       </mj-column>
     </mj-section>
 
-    <!-- Photo + greeting -->
+    <!-- Greeting -->
     <mj-section padding="30px 0 0">
       <mj-column>
-        <mj-image src="https://nannymckenzie.github.io/photos/mckenzie-portrait.jpg" alt="McKenzie smiling on a sofa, reading a picture book, with baby toys close by" width="148px" border-radius="14px" padding="0 32px 22px" />
         <!-- copy/email.greeting (deco/email.var.first-name) -->
         <mj-text font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="24px" line-height="32px" color="#6f5038" padding="0 32px 12px">
           Hi {{PARENT_FIRST_NAME}},

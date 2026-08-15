@@ -97,8 +97,13 @@ export function renderAdminEmailText(lead: LeadFields): string {
 
 // --- Lead confirmation (sent to the family, gated by LEAD_CONFIRMATION_ENABLED) ---
 
-function leadFirstName(lead: LeadFields): string {
-  return lead.parent_name.trim().split(/\s+/)[0] || 'there'
+// Returns null when the field holds multiple names ("Ana and Luis Pérez",
+// "Ana & Luis", "Ana, Luis") so callers fall back to a neutral greeting
+// instead of addressing only the first person.
+function leadFirstName(lead: LeadFields): string | null {
+  const name = lead.parent_name.trim()
+  if (!name || /\band\b|&|,|\+|\by\b/i.test(name)) return null
+  return name.split(/\s+/)[0]
 }
 
 // Every form question renders in the receipt, per José's request; answers the
@@ -126,12 +131,13 @@ function summaryPairs(lead: LeadFields): Array<[string, string]> {
 }
 
 export function leadConfirmationSubject(lead: LeadFields): string {
-  return `Thank you for reaching out, ${leadFirstName(lead)}!`
+  const first = leadFirstName(lead)
+  return first ? `Thank you for reaching out, ${first}!` : 'Thank you for reaching out!'
 }
 
 export function renderLeadConfirmation(lead: LeadFields): string {
   const fills: Record<string, string> = {
-    '{{PARENT_FIRST_NAME}}': esc(leadFirstName(lead)),
+    '{{PARENT_FIRST_NAME}}': esc(leadFirstName(lead) ?? 'there'),
     '{{SUMMARY_ROWS}}': summaryPairs(lead).map(([l, v]) => summaryRow(l, v)).join(''),
   }
   // Single-pass replace so escaped user input is never rescanned for tokens.
@@ -144,7 +150,7 @@ export function renderLeadConfirmation(lead: LeadFields): string {
 export function renderLeadConfirmationText(lead: LeadFields): string {
   const summary = summaryPairs(lead).map(([l, v]) => `${l}: ${v || '—'}`)
   const lines = [
-    `Hi ${leadFirstName(lead)},`,
+    `Hi ${leadFirstName(lead) ?? 'there'},`,
     '',
     'Thank you so much for reaching out about care for your family! I\'m looking forward to reading and responding soon.',
     '',

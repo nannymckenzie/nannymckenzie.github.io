@@ -31,7 +31,7 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `about.overline` | About |
 | `about.h2` | Passion for early childhood education |
 | `about.body1` | As a former primary school teacher with three years experience as a full-time nanny… |
-| `about.body2` | References available upon request. (reintroduced 2026-08-15 per Figma annotation) |
+| `about.body2` | References available upon request. (bold, reintroduced 2026-08-15 per Figma annotation) |
 | `trust.badge1` | WA State Teacher Certified / Endorsed in Elementary Ed, Visual Arts, English Language Learners |
 | `trust.badge3` | STARS Early Childhood Certified (subtitle dropped 2026-08-15) |
 | `trust.badge4` | CPR and First Aid Certified (subtitle dropped 2026-08-15) |
@@ -120,6 +120,7 @@ Layers named `deco/email.var.<field>` hold sample text for fields interpolated a
 send time (first name, summary values) — copy sweeps skip them.
 `copy/email.subject` and `copy/email.preheader` live in the side frame
 `Email/Meta`; they are email metadata, not rendered layers.
+The portrait photo at the top of the email was removed 2026-08-15 (José).
 
 Note: in Figma the three next-steps bullets live in ONE text layer
 (`copy/email.next-steps.2`, node 167:295, one line per bullet); the mjml keeps
@@ -128,10 +129,10 @@ and the old `next-steps.1/3` layers were deleted 2026-08-09.
 
 | Anchor | Current text (first line) |
 | --- | --- |
-| `copy/email.subject` | Thank you for reaching out, {first name}! |
+| `copy/email.subject` | Thank you for reaching out, {first name}! (name dropped entirely for multi-name submissions) |
 | `copy/email.preheader` | I'm looking forward to reading and responding soon. |
 | `copy/email.brand` | McKenzie Conner |
-| `copy/email.greeting` | Hi {first name}, |
+| `copy/email.greeting` | Hi {first name}, (falls back to "Hi there," when the name field holds multiple names, 2026-08-15) |
 | `copy/email.thanks` | Thank you so much for reaching out about care for your family! I'm looking forward to reading and responding soon. |
 | `copy/email.next-steps.h` | What happens next |
 | `copy/email.next-steps.1` | If it feels like we could be a good match, we'll set up a relaxed introductory call… |

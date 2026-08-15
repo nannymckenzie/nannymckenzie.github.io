@@ -56,14 +56,6 @@ export const LEAD_CONFIRMATION_HTML = `<!doctype html>
     
   
     
-    <style type="text/css">
-
-    @media only screen and (max-width:479px) {
-      table.mj-full-width-mobile { width: 100% !important; }
-      td.mj-full-width-mobile { width: auto !important; }
-    }
-  
-    </style>
     
     <!-- copy/email.preheader -->
   </head>
@@ -129,7 +121,7 @@ export const LEAD_CONFIRMATION_HTML = `<!doctype html>
       
       <!--[if mso | IE]></td></tr></table><![endif]-->
     
-    <!-- Photo + greeting -->
+    <!-- Greeting -->
       
       <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:600px;" width="600" bgcolor="#fffdf9" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     
@@ -154,31 +146,7 @@ export const LEAD_CONFIRMATION_HTML = `<!doctype html>
          border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%"
       >
         <tbody>
-          
-              <tr>
-                <td
-                   align="center" style="font-size:0px;padding:0 32px 22px;word-break:break-word;"
-                >
-                  
-      <table
-         border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;"
-      >
-        <tbody>
-          <tr>
-            <td  style="width:148px;">
-              
-      <img
-         alt="McKenzie smiling on a sofa, reading a picture book, with baby toys close by" src="https://nannymckenzie.github.io/photos/mckenzie-portrait.jpg" style="border:0;border-radius:14px;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="148" height="auto"
-      />
-    
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    
-                </td>
-              </tr>
-            <!-- copy/email.greeting (deco/email.var.first-name) -->
+          <!-- copy/email.greeting (deco/email.var.first-name) -->
               <tr>
                 <td
                    align="left" style="font-size:0px;padding:0 32px 12px;word-break:break-word;"
