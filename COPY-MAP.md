@@ -30,7 +30,7 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `hero.meta3` | Starting as early as Fall 2026 |
 | `about.overline` | About |
 | `about.h2` | With a passion for early childhood education |
-| `about.body1` | With four years experience teaching primary grades (K-2) and three years experience… |
+| `about.body1` | As a former primary school teacher with three years experience as a full-time nanny… |
 | `trust.badge1` | WA State Teacher Certified / Endorsed in Elementary Ed, Visual Arts, English Language Learners |
 | `trust.badge3` | STARS Early Childhood Certified / Early care and education training |
 | `trust.badge4` | CPR and First Aid Certified / Current certification |
@@ -77,14 +77,14 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `inquiry.h2` | Let's connect! Tell me about your family |
 | `inquiry.req-note` | * means the field is required. |
 | `inquiry.legend1` | About you |
-| `inquiry.label.parent-name` | Parent name * |
+| `inquiry.label.parent-name` | Parents' names * |
 | `inquiry.label.email` | Email * |
 | `inquiry.label.phone` | Phone * |
 | `inquiry.label.contact-method` | Preferred contact method |
 | `inquiry.label.town` | Town |
 | `inquiry.label.neighborhood` | Neighborhood |
 | `inquiry.legend2` | The care you're looking for |
-| `inquiry.label.children-ages` | Children and ages |
+| `inquiry.label.children-ages` | Children and ages (placeholder "e.g. one child, age three") |
 | `inquiry.label.start-date` | Desired start date (free-text input, placeholder "e.g. Mid September") |
 | `inquiry.label.schedule` | Preferred schedule, Monday to Friday |
 | `inquiry.label.message` | Tell me a little about your family and the care you are seeking |
