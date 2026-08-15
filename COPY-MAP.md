@@ -32,16 +32,16 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `about.h2` | With a passion for early childhood education |
 | `about.body1` | As a former primary school teacher with three years experience as a full-time nanny… |
 | `trust.badge1` | WA State Teacher Certified / Endorsed in Elementary Ed, Visual Arts, English Language Learners |
-| `trust.badge3` | STARS Early Childhood Certified / Early care and education training |
-| `trust.badge4` | CPR and First Aid Certified / Current certification |
+| `trust.badge3` | STARS Early Childhood Certified (subtitle dropped 2026-08-15) |
+| `trust.badge4` | CPR and First Aid Certified (subtitle dropped 2026-08-15) |
 | `baby.overline` | Bringing my baby |
 | `baby.h2` | Care that comes with a built-in friend |
-| `baby.body1` | My little one will join us most days, creating a small mixed-age environment… |
+| `baby.body1` | My little one (born May 2, 2026) will join us most days, creating a small mixed-age environment… |
 | `baby.body2` | Our children will be each other’s teachers. With my guided facilitation… |
 | `approach.overline` | My approach |
-| `approach.h2` | How I care for your child |
+| `approach.h2` | How I care for children (no more `<em>` accent, 2026-08-15) |
 | `approach.card1.h3` | Play-based learning |
-| `approach.card1.body` | Children do their best learning through play. Our days include lesson-planned projects… |
+| `approach.card1.body` | Children do their best learning through play. Our days include projects, art, stories… |
 | `approach.card2.h3` | Relationship-centered care |
 | `approach.card2.body` | Trusting relationships come first. I love connecting meaningfully with each child… |
 | `approach.card3.h3` | Developmentally appropriate practice |
@@ -50,12 +50,12 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `offer.h2` | Day-to-day |
 | `offer.bullet1` | Full-time nanny care in Whatcom County, at your home and/or at my home. |
 | `offer.bullet2` | Age-appropriate activities focused on development of curiosity, creativity, problem-solving… |
-| `offer.bullet3` | Strong communication. Daily check-ins and weekly developmental reflections. |
+| `offer.bullet3` | Strong communication. Daily check-ins along with optional photo and videos sent to you during the day. |
 | `offer.bullet4` | Light child-related tidying. Play spaces reset, children's dishes done… |
-| `offer.bullet5` | Screen-free fun. Lots of reading, dancing and exploring. My phone will be tucked away… |
+| `offer.bullet5` | Screen-free fun. Lots of reading, dancing and exploring. |
 | `offer.bullet6` | Language development. Intentional language development in English and Spanish (optional). |
 | `offer.bullet7` | Healthy nutrition. Optional: I shop, purchase, and prep your child’s homemade plant-based lunches… |
-| `rates.card-label` | HOURLY RATE |
+| `rates.card-label` | STARTING HOURLY RATE |
 | `rates.amount` | $32 |
 | `rates.unit` | per hour |
 | `rates.caption` | Full-time · Monday to Friday |
