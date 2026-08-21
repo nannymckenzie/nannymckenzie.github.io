@@ -406,3 +406,8 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 # it does its own origin allow-listing, spam checks, and rate limiting.
 [functions.submit-lead]
 verify_jwt = false
+
+# track receives anonymous visit/scroll events from the public site (origin
+# allow-listed) and serves the token-gated stats page. Same JWT reasoning.
+[functions.track]
+verify_jwt = false

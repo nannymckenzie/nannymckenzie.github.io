@@ -5,6 +5,7 @@ import './styles/tokens.css'
 import './styles/base.css'
 import './styles/sections.css'
 import { wireLeadForm } from './form'
+import { wireTracking } from './track'
 
 // Reveal styles are scoped under .js so content stays visible without JS
 document.documentElement.classList.add('js')
@@ -39,3 +40,4 @@ if (header) {
 }
 
 wireLeadForm()
+wireTracking()
