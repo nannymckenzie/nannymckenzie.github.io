@@ -31,6 +31,8 @@
   th:first-child, td:first-child { text-align: left; }
   th { background: #e0e2cb; font-size: 0.85rem; }
   tr:nth-child(even) td { background: #faf5ef; }
+  .fsrc { font-family: Georgia, serif; font-size: 0.98rem; font-weight: 600;
+          margin: 16px 0 4px; color: #5c6050; }
   .note { color: #5c6050; font-size: 0.85rem; margin-top: 24px; }
   @media (max-width: 520px) { .flbl { flex-basis: 150px; } }
 </style>
@@ -95,13 +97,27 @@ try { localStorage.setItem('mc-notrack', '1') } catch { /* fine */ }
     '<div class="card"><div class="num">' + get(s, 'visit') + '</div>' +
     '<div class="lbl">' + esc(sourceLabel(s)) + '</div></div>').join('')
 
-  const funnel = EVENTS.map((event) => {
-    const n = sources.reduce((sum, s) => sum + get(s, event), 0)
-    const pct = totalVisitors ? Math.round((n / totalVisitors) * 100) : 0
-    return '<div class="frow"><span class="flbl">' + esc(EVENT_LABELS[event]) + '</span>' +
-      '<span class="fbar"><span style="width:' + pct + '%"></span></span>' +
-      '<span class="fnum">' + n + ' <small>(' + pct + '%)</small></span></div>'
-  }).join('')
+  // One funnel per source; percentages are relative to that source's own
+  // visitors so "QR scanners read further than link visitors" is readable
+  // at a glance.
+  const funnelFor = (label, count) =>
+    '<h3 class="fsrc">' + esc(label) + '</h3>' +
+    EVENTS.map((event) => {
+      const n = count(event)
+      const visits = count('visit')
+      const pct = visits ? Math.round((n / visits) * 100) : 0
+      return '<div class="frow"><span class="flbl">' + esc(EVENT_LABELS[event]) + '</span>' +
+        '<span class="fbar"><span style="width:' + pct + '%"></span></span>' +
+        '<span class="fnum">' + n + ' <small>(' + pct + '%)</small></span></div>'
+    }).join('')
+
+  const funnel = sources
+    .map((s) => funnelFor(sourceLabel(s), (event) => get(s, event)))
+    .join('') +
+    (sources.length > 1
+      ? funnelFor('All visitors together',
+          (event) => sources.reduce((sum, s) => sum + get(s, event), 0))
+      : '')
 
   const visitRows = daily.filter((r) => r.event === 'visit')
   const days = [...new Set(visitRows.map((r) => r.day))].sort().reverse()
