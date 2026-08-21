@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Site traffic</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; padding: 24px 16px 48px; background: #f4ece4; color: #3f4437;
+         font: 17px/1.5 'Nunito Sans', 'Segoe UI', sans-serif; }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-family: Georgia, serif; font-size: 1.7rem; margin: 0 0 4px; }
+  .sub { color: #5c6050; margin: 0 0 20px; font-size: 0.95rem; }
+  h2 { font-family: Georgia, serif; font-size: 1.15rem; margin: 28px 0 10px; }
+  .cards { display: flex; gap: 12px; flex-wrap: wrap; }
+  .card { background: #fffdf9; border: 1px solid rgba(63,68,55,0.14); border-radius: 14px;
+          padding: 14px 18px; flex: 1 1 140px; }
+  .num { font-size: 2rem; font-weight: 700; }
+  .lbl { color: #5c6050; font-size: 0.9rem; }
+  .frow { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+  .flbl { flex: 0 0 220px; font-size: 0.92rem; }
+  .fbar { flex: 1; height: 14px; background: #fffdf9; border: 1px solid rgba(63,68,55,0.14);
+          border-radius: 7px; overflow: hidden; }
+  .fbar span { display: block; height: 100%; background: #8c8f6b; }
+  .fnum { flex: 0 0 84px; text-align: right; font-variant-numeric: tabular-nums; }
+  small { color: #5c6050; }
+  table { border-collapse: collapse; width: 100%; background: #fffdf9;
+          border: 1px solid rgba(63,68,55,0.14); border-radius: 10px; overflow: hidden; }
+  th, td { padding: 7px 12px; text-align: right; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  th { background: #e0e2cb; font-size: 0.85rem; }
+  tr:nth-child(even) td { background: #faf5ef; }
+  .note { color: #5c6050; font-size: 0.85rem; margin-top: 24px; }
+  @media (max-width: 520px) { .flbl { flex-basis: 150px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Site traffic</h1>
+  <p class="sub">nannymckenzie.github.io &middot; last 30 days &middot; counts are unique visitors</p>
+  <div id="content"><p class="sub">Loading&hellip;</p></div>
+  <p class="note">"Poster QR scan" means the visitor arrived through the QR code
+  (the QR opens the site with ?src=poster). Days follow Pacific time. Form
+  submissions themselves are in the CRM sheet, tagged with the same source.</p>
+</main>
+<script>
+(async () => {
+  const TRACK_URL = 'https://oxamipkpkkyhfjrmvbgs.supabase.co/functions/v1/track'
+  const EVENTS = ['visit', 'scroll_25', 'scroll_50', 'scroll_75', 'form_seen']
+  const EVENT_LABELS = {
+    visit: 'Opened the page',
+    scroll_25: 'Scrolled a bit (25%)',
+    scroll_50: 'Scrolled halfway',
+    scroll_75: 'Scrolled most of it (75%)',
+    form_seen: 'Reached the contact form',
+  }
+  const SOURCE_LABELS = { poster: 'Poster QR scan', website: 'Direct / other' }
+  const sourceLabel = (s) => SOURCE_LABELS[s] || 'Poster QR (' + s + ')'
+  const esc = (s) => String(s).replace(/[&<>"]/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  const el = document.getElementById('content')
+
+  // The private token rides in the #fragment so it never appears in server
+  // logs; ?token= also works for older bookmarks.
+  const token = location.hash.replace(/^#/, '')
+    || new URLSearchParams(location.search).get('token') || ''
+  if (!token) {
+    el.innerHTML = '<p class="sub">This page needs the private link with the access code after the # sign. Ask Jos&eacute; for it.</p>'
+    return
+  }
+
+  let data
+  try {
+    const res = await fetch(TRACK_URL + '?token=' + encodeURIComponent(token))
+    if (!res.ok) throw new Error(String(res.status))
+    data = await res.json()
+  } catch (err) {
+    el.innerHTML = String(err).includes('404')
+      ? '<p class="sub">That access code is not right. Double-check the link after the # sign.</p>'
+      : '<p class="sub">Could not load the numbers just now. Pull to refresh or try again in a minute.</p>'
+    return
+  }
+
+  const { summary, daily } = data
+  const sources = [...new Set(summary.map((r) => r.source))].sort()
+  const get = (source, event) =>
+    (summary.find((r) => r.source === source && r.event === event) || {}).sessions || 0
+  const totalVisitors = sources.reduce((n, s) => n + get(s, 'visit'), 0)
+
+  const cards = sources.map((s) =>
+    '<div class="card"><div class="num">' + get(s, 'visit') + '</div>' +
+    '<div class="lbl">' + esc(sourceLabel(s)) + '</div></div>').join('')
+
+  const funnel = EVENTS.map((event) => {
+    const n = sources.reduce((sum, s) => sum + get(s, event), 0)
+    const pct = totalVisitors ? Math.round((n / totalVisitors) * 100) : 0
+    return '<div class="frow"><span class="flbl">' + esc(EVENT_LABELS[event]) + '</span>' +
+      '<span class="fbar"><span style="width:' + pct + '%"></span></span>' +
+      '<span class="fnum">' + n + ' <small>(' + pct + '%)</small></span></div>'
+  }).join('')
+
+  const visitRows = daily.filter((r) => r.event === 'visit')
+  const days = [...new Set(visitRows.map((r) => r.day))].sort().reverse()
+  const dayRows = days.map((day) => {
+    const per = sources.map((s) =>
+      (visitRows.find((r) => r.day === day && r.source === s) || {}).sessions || 0)
+    return '<tr><td>' + esc(day) + '</td>' +
+      per.map((n) => '<td>' + n + '</td>').join('') +
+      '<td><strong>' + per.reduce((a, b) => a + b, 0) + '</strong></td></tr>'
+  }).join('')
+
+  el.innerHTML =
+    '<div class="cards"><div class="card"><div class="num">' + totalVisitors + '</div>' +
+    '<div class="lbl">Total visitors</div></div>' + cards + '</div>' +
+    '<h2>How far people read</h2>' +
+    (totalVisitors ? funnel : '<p class="sub">No visits recorded yet.</p>') +
+    '<h2>Visitors per day</h2>' +
+    '<table><tr><th>Day</th>' +
+    sources.map((s) => '<th>' + esc(sourceLabel(s)) + '</th>').join('') +
+    '<th>Total</th></tr>' +
+    (dayRows || '<tr><td colspan="' + (sources.length + 2) + '">No visits recorded yet.</td></tr>') +
+    '</table>'
+})()
+</script>
+</body>
+</html>
