@@ -45,6 +45,9 @@
   submissions themselves are in the CRM sheet, tagged with the same source.</p>
 </main>
 <script>
+// Anyone reading this dashboard is household: flag the browser so their own
+// visits to the site are never counted (src/track.ts checks this key).
+try { localStorage.setItem('mc-notrack', '1') } catch { /* fine */ }
 (async () => {
   const TRACK_URL = 'https://oxamipkpkkyhfjrmvbgs.supabase.co/functions/v1/track'
   const EVENTS = ['visit', 'scroll_25', 'scroll_50', 'scroll_75', 'form_seen']

@@ -9,6 +9,20 @@ const TRACK_URL = 'https://oxamipkpkkyhfjrmvbgs.supabase.co/functions/v1/track'
 export function wireTracking(): void {
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return
 
+  // Household opt-out: opening the site once with ?notrack (or opening
+  // stats.html, which sets the same flag) marks this browser as ours forever
+  // so family visits don't inflate the dashboard. IP blocking is deliberately
+  // not used: the household is on T-Mobile's shared CGNAT range, so an IP
+  // block would also drop real visitors on T-Mobile phones.
+  try {
+    if (new URLSearchParams(location.search).has('notrack')) {
+      localStorage.setItem('mc-notrack', '1')
+    }
+    if (localStorage.getItem('mc-notrack')) return
+  } catch {
+    // storage unavailable: track normally
+  }
+
   let session: string
   try {
     session = sessionStorage.getItem('mc-session') ?? crypto.randomUUID()
