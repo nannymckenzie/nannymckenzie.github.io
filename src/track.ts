@@ -17,6 +17,17 @@ export function wireTracking(): void {
   try {
     if (new URLSearchParams(location.search).has('notrack')) {
       localStorage.setItem('mc-notrack', '1')
+      // Visible receipt, so there is never doubt about whether the opt-out
+      // took on this device (a cached old page once swallowed it silently).
+      const note = document.createElement('div')
+      note.textContent = '✓ This device will not be counted in site stats'
+      note.style.cssText =
+        'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);' +
+        'background:#3f4437;color:#fffdf9;padding:10px 18px;border-radius:999px;' +
+        'font:600 15px/1.3 sans-serif;z-index:999;max-width:90vw;text-align:center;' +
+        'box-shadow:0 4px 14px rgba(0,0,0,0.25)'
+      document.body.appendChild(note)
+      setTimeout(() => note.remove(), 8000)
     }
     if (localStorage.getItem('mc-notrack')) return
   } catch {
