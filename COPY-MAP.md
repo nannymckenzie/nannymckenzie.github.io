@@ -57,7 +57,7 @@ A second section below covers the lead confirmation email (`copy/email.*`).
 | `offer.bullet6` | Language development. Intentional language development in English and Spanish (optional). |
 | `offer.bullet7` | Healthy nutrition. Optional: I shop, purchase, and prep your child’s homemade plant-based lunches… |
 | `rates.card-label` | STARTING HOURLY RATE |
-| `rates.amount` | $32 |
+| `rates.amount` | $36 |
 | `rates.unit` | per hour |
 | `rates.caption` | Full-time · Monday to Friday |
 | `rates.legal` | W-2 household employment per Washington law |
